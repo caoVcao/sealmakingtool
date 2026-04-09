@@ -1,0 +1,88 @@
+/* ===== 全局 CSS 变量 — 对齐 UI_DESIGN_SPEC.md ===== */
+:root {
+  /* 品牌色 */
+  --color-primary: #1890ff;
+  --color-primary-hover: #40a9ff;
+  --color-primary-active: #096dd9;
+
+  /* 印章专有色 */
+  --color-seal-red: #e60000;
+  --color-seal-blue: #0050b3;
+  --color-seal-black: #262626;
+
+  /* 功能色 */
+  --color-success: #52c41a;
+  --color-error: #ff4d4f;
+  --color-warning: #faad14;
+
+  /* 背景色 */
+  --color-bg-app: #f0f2f5;
+  --color-bg-card: #ffffff;
+
+  /* 文字色 */
+  --color-text-primary: #262626;
+  --color-text-secondary: #595959;
+  --color-text-placeholder: #bfbfbf;
+  --color-text-disabled: #bfbfbf;
+
+  /* 边框 */
+  --color-border: #d9d9d9;
+  --color-border-light: #f0f0f0;
+
+  /* 圆角 */
+  --border-radius-card: 8px;
+  --border-radius-base: 4px;
+
+  /* 间距 */
+  --spacing-page: 24px;
+  --spacing-card: 20px;
+  --spacing-section: 16px;
+  --spacing-item: 12px;
+
+  /* 阴影 */
+  --shadow-card: 0 1px 4px rgba(0, 21, 41, 0.08);
+  --shadow-card-hover: 0 4px 12px rgba(0, 21, 41, 0.12);
+
+  /* 棋盘格透明背景（用于印章预览区） */
+  --checkerboard-bg: repeating-conic-gradient(#d9d9d9 0% 25%, #ffffff 0% 50%) 0 0 / 16px 16px;
+}
+
+/* ===== 全局重置 ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 15px; /* 适配 40-50 岁用户群体 */
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-app);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== 通用工具类 ===== */
+.card {
+  background: var(--color-bg-card);
+  border-radius: var(--border-radius-card);
+  box-shadow: var(--shadow-card);
+}
+
+/* Element Plus 主题覆盖 */
+.el-button--primary {
+  --el-button-bg-color: var(--color-primary);
+  --el-button-border-color: var(--color-primary);
+  --el-button-hover-bg-color: var(--color-primary-hover);
+  --el-button-active-bg-color: var(--color-primary-active);
+}
+
+/* 禁用蒙层 */
+.disabled-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.6);
+  z-index: 10;
+  cursor: not-allowed;
+  border-radius: var(--border-radius-card);
+}
