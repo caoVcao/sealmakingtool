@@ -15,7 +15,7 @@
       v-model="store.params.scale"
       label="图片缩放"
       :min="10"
-      :max="200"
+      :max="500"
       unit="%"
       :disabled="!store.isUploaded"
     />

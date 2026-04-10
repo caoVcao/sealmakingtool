@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
+    "build:zip": "pnpm build && cd dist && zip -r ../seal-making-tool-dist.zip .",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -3,3 +3,7 @@
 **/dist/
 *.log
 .DS_Store
+# 嵌套克隆的空仓库，勿提交
+sealmakingtool/
+# 构建产物压缩包
+seal-making-tool/seal-making-tool-dist.zip

@@ -35,7 +35,7 @@ export interface SealParams {
   colorKey: SealColorKey
   colorHex: string      // 实际应用的颜色 hex
   rotation: number      // 度，范围 -180 ~ 180
-  scale: number         // 百分比，范围 10 ~ 200
+  scale: number         // 百分比，范围 10 ~ 500
   opacity: number       // 百分比，范围 10 ~ 100
 }
 

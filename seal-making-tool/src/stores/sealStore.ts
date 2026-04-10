@@ -64,12 +64,16 @@ export const useSealStore = defineStore('seal', () => {
   })
 
   // ===== Actions =====
+  /**
+   * 设置新上传/更换后的图片数据，并清空预览；印章尺寸与其它制作参数恢复默认值。
+   */
   function setImageData(file: File, dataUrl: string) {
     image.file = file
     image.dataUrl = dataUrl
     image.offsetX = 0
     image.offsetY = 0
     image.detectedMainColor = null
+    Object.assign(params, DEFAULT_PARAMS)
     phase.value = 'uploaded'
     previewDataUrl.value = null
     exportDataUrl.value = null
