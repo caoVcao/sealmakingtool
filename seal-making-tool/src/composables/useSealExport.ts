@@ -148,9 +148,41 @@ export async function detectSealColor(dataUrl: string): Promise<string> {
 }
 
 // ===== 下载 PNG =====
-export function downloadPng(dataUrl: string, sealTypeLabel: string) {
+
+/**
+ * 从上传文件的 `File.name` 解析可用于下载的「主名」（去掉路径与最后一层扩展名）。
+ * 非法或空结果返回 `null`，由调用方回退为 `seal_{类型}_{日期}.png`。
+ *
+ * @param originalFileName - 浏览器提供的原始文件名，可为空
+ * @returns 清理后的主名；无法使用时为 `null`
+ */
+export function resolveDownloadBasename(originalFileName: string | null | undefined): string | null {
+  if (originalFileName == null || typeof originalFileName !== 'string') return null
+  const trimmed = originalFileName.trim()
+  if (!trimmed) return null
+  const segment = trimmed.replace(/^[\\/]+/, '').split(/[/\\]/).pop() ?? trimmed
+  const withoutExt = segment.replace(/\.[^.]+$/, '').trim()
+  if (!withoutExt) return null
+  const cleaned = withoutExt.replace(/[<>:"/\\|?*\u0000-\u001f]/g, '_').trim()
+  return cleaned.length > 0 ? cleaned : null
+}
+
+/**
+ * 触发浏览器下载透明底 PNG。
+ * 命名：与上传文件主名一致、扩展名为 `.png`；无有效上传名时回退 `seal_{印章类型}_{yyyyMMdd}.png`。
+ *
+ * @param dataUrl - PNG 的 data URL
+ * @param sealTypeLabel - 印章类型展示名，用于兜底文件名
+ * @param originalFileName - 当前上传文件的 `name`，可选
+ */
+export function downloadPng(
+  dataUrl: string,
+  sealTypeLabel: string,
+  originalFileName?: string | null
+) {
   const date = new Date().toISOString().slice(0, 10).replace(/-/g, '')
-  const filename = `seal_${sealTypeLabel}_${date}.png`
+  const basename = resolveDownloadBasename(originalFileName)
+  const filename = basename != null ? `${basename}.png` : `seal_${sealTypeLabel}_${date}.png`
   const link = document.createElement('a')
   link.href = dataUrl
   link.download = filename

@@ -150,7 +150,7 @@ async function onGenerate() {
 
 function onSave() {
   if (!store.exportDataUrl) return
-  downloadPng(store.exportDataUrl, store.currentSealType.label)
+  downloadPng(store.exportDataUrl, store.currentSealType.label, store.image.file?.name)
 }
 
 function onReset() {
