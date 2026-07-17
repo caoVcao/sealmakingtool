@@ -5,7 +5,6 @@ import {
   SEAL_TYPES,
   DEFAULT_PARAMS,
   PRESET_COLORS,
-  DELTA_E_THRESHOLD,
   CUSTOM_SIZE_MIN,
   CUSTOM_SIZE_MAX,
 } from '../constants/sealTypes'
@@ -49,14 +48,11 @@ export const useSealStore = defineStore('seal', () => {
     ]
 
     if (detectedHex) {
-      const isSimilar = [PRESET_COLORS.red, PRESET_COLORS.blue, PRESET_COLORS.black]
-        .some(presetHex => _deltaEVisible(detectedHex, presetHex))
-
       options.unshift({
         key: 'original',
         hex: detectedHex,
         label: '原色',
-        visible: !isSimilar,
+        visible: true,
       })
     }
 
@@ -139,38 +135,6 @@ export const useSealStore = defineStore('seal', () => {
     image.offsetY = 0
     Object.assign(params, DEFAULT_PARAMS)
     isProcessing.value = false
-  }
-
-  // ===== 内部：ΔE 相似判断（简化版，用于显隐原色）=====
-  function _deltaEVisible(hex1: string, hex2: string): boolean {
-    const lab1 = _hexToLab(hex1)
-    const lab2 = _hexToLab(hex2)
-    const deltaE = Math.sqrt(
-      Math.pow(lab1.l - lab2.l, 2) +
-      Math.pow(lab1.a - lab2.a, 2) +
-      Math.pow(lab1.b - lab2.b, 2)
-    )
-    return deltaE < DELTA_E_THRESHOLD
-  }
-
-  function _hexToLab(hex: string): { l: number; a: number; b: number } {
-    const r = parseInt(hex.slice(1, 3), 16) / 255
-    const g = parseInt(hex.slice(3, 5), 16) / 255
-    const b = parseInt(hex.slice(5, 7), 16) / 255
-
-    const toLinear = (v: number) => v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)
-    const rl = toLinear(r), gl = toLinear(g), bl = toLinear(b)
-
-    const x = (rl * 0.4124 + gl * 0.3576 + bl * 0.1805) / 0.95047
-    const y = (rl * 0.2126 + gl * 0.7152 + bl * 0.0722) / 1.00000
-    const z = (rl * 0.0193 + gl * 0.1192 + bl * 0.9505) / 1.08883
-
-    const f = (v: number) => v > 0.008856 ? Math.cbrt(v) : 7.787 * v + 16 / 116
-    return {
-      l: 116 * f(y) - 16,
-      a: 500 * (f(x) - f(y)),
-      b: 200 * (f(y) - f(z)),
-    }
   }
 
   return {

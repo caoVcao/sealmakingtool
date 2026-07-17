@@ -5,7 +5,7 @@ export interface SealColorOption {
   key: SealColorKey
   hex: string        // 目标色值（原色时为识别到的主色 hex）
   label: string
-  visible: boolean   // 原色与预设色相近时 false
+  visible: boolean   // 是否在颜色选项中展示
 }
 
 // ===== 印章类型 =====

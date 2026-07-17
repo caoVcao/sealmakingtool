@@ -10,7 +10,7 @@
     <input
       ref="fileInputRef"
       type="file"
-      accept="image/jpeg,image/png"
+      accept="image/jpeg,image/png,image/bmp,.jpg,.jpeg,.png,.bmp"
       class="hidden-input"
       @change="onFileChange"
     />
@@ -19,8 +19,8 @@
       <el-icon class="upload-icon"><Plus /></el-icon>
       <p class="upload-title">上传印章图片</p>
       <ul class="upload-tips">
-        <li>请在白纸上盖章后，通过扫描或拍照上传印模，确保印章清晰完整且无多余边角</li>
-        <li>支持 jpg/png 格式，建议大小 5M 以内</li>
+        <li>请在白纸上盖章后拍照上传，确保印章清晰完整且无多余边角</li>
+        <li>支持 jpg/jpeg/png/bmp 格式，建议大小 5M 以内</li>
       </ul>
     </div>
   </div>
@@ -39,7 +39,8 @@ const fileInputRef = ref<HTMLInputElement | null>(null)
 const isDragOver = ref(false)
 
 const MAX_SIZE_BYTES = 5 * 1024 * 1024  // 5MB
-const ALLOWED_TYPES = ['image/jpeg', 'image/png']
+const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/bmp', 'image/x-ms-bmp']
+const ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'bmp']
 
 function triggerFileInput() {
   fileInputRef.value?.click()
@@ -60,8 +61,12 @@ function onDrop(e: DragEvent) {
 }
 
 function validate(file: File) {
-  if (!ALLOWED_TYPES.includes(file.type)) {
-    ElMessage.error('仅支持 jpg/png 格式，请重新选择')
+  const extension = file.name.split('.').pop()?.toLowerCase() ?? ''
+  const isMimeTypeAllowed = ALLOWED_TYPES.includes(file.type)
+  const isExtensionAllowed = ALLOWED_EXTENSIONS.includes(extension)
+
+  if (!isMimeTypeAllowed && !isExtensionAllowed) {
+    ElMessage.error('仅支持 jpg/jpeg/png/bmp 格式，请重新选择')
     return
   }
   if (file.size > MAX_SIZE_BYTES) {

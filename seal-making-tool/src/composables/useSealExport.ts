@@ -1,5 +1,6 @@
 import type { SealParams, ImageState } from '../types/seal.types'
 import { MM_TO_PX } from '../constants/sealTypes'
+import { encodeCanvasToOptimizedPngDataUrl } from '../utils/pngEncoder'
 import { processImage, detectMainColor, loadImageData } from './useImageProcessor'
 
 const PREVIEW_BASE_FRAME_PX = 320
@@ -100,8 +101,8 @@ export async function renderSeal(
   // 6) 将虚框裁剪结果输出到导出画布
   const exportCanvas = drawFrameToExportCanvas(frameCanvas, outputW, outputH)
 
-  // 7) 导出无水印 dataUrl
-  const exportDataUrl = exportCanvas.toDataURL('image/png')
+  // 7) UPNG 无损压缩导出无水印 dataUrl（较浏览器默认 PNG 显著减小体积）
+  const exportDataUrl = encodeCanvasToOptimizedPngDataUrl(exportCanvas)
 
   // 8) 叠加水印 → 预览 dataUrl
   const previewDataUrl = addWatermark(exportCanvas, outputW, outputH)
